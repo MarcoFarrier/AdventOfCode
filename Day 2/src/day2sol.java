@@ -10,7 +10,29 @@ class day2sol
 {
 	public static void main (String[] args) throws java.lang.Exception
 	{
-		System.out.println(getPaper(2,3,4));
+		BufferedReader br = new BufferedReader(new FileReader("input.txt"));
+		
+		String line = br.readLine();
+		double totalPaper = 0;
+		double totalRibbon = 0;
+		
+		while(line != null)
+		{
+			String[] data = line.split("x");
+			Double[] dataDouble = new Double[3];
+			for(int i = 0; i < 3; i++)
+			{
+				dataDouble[i] = Double.parseDouble(data[i]);
+			}
+			
+			totalPaper += getPaper(dataDouble[0], dataDouble[1], dataDouble[2]);
+			totalRibbon += getRibbon(dataDouble[0], dataDouble[1], dataDouble[2]);
+			line = br.readLine();
+		}
+		
+		br.close();
+		System.out.println(totalPaper);
+		System.out.println(totalRibbon);
 	}
 	
 	static double getPaper(double l, double w, double h)
@@ -27,5 +49,23 @@ class day2sol
 		double presentSize = 2 * (side1 + side2 + side3);
 		
 		return presentSize + slack;
+	}
+	
+	static double getRibbon(double l, double w, double h)
+	{
+		double[] lengths = {l, w, h};
+		Arrays.sort(lengths); //sorted lowest to highest
+		
+		//"The ribbon required to wrap a present is the 
+		//shortest distance around its sides, or 
+		//the smallest perimeter of any one face."
+		double perimeter = 2 * (lengths[0] + lengths[1]);
+		
+		//"Each present also requires a bow made out of ribbon as well
+		//the feet of ribbon required for the perfect bow is equal 
+		//to the cubic feet of volume of the present."
+		double volume = l * w * h;
+		
+		return volume + perimeter;
 	}
 }
